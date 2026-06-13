@@ -8,14 +8,14 @@ export default {
     extend: {
       colors: {
         surface: {
-          base: '#0B1020',
-          card: '#121A2F',
-          elevated: '#1A2540',
+          base: 'var(--bg-base)',
+          card: 'var(--bg-card)',
+          elevated: 'var(--bg-elevated)',
           border: '#1E2D4A',
         },
         accent: {
-          blue: '#3B82F6',
-          purple: '#8B5CF6',
+          blue: 'var(--accent-blue)',
+          purple: 'var(--accent-purple)',
           'blue-dim': '#1D4ED8',
           'purple-dim': '#6D28D9',
         },

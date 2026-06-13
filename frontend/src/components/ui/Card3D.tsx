@@ -1,4 +1,3 @@
-// @ts-expect-error no proper types for react-tilt
 import { Tilt } from 'react-tilt'
 import { useAccessibilityStore } from '@/store'
 import { cn } from '@/utils'

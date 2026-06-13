@@ -1,15 +1,16 @@
-import { forwardRef } from 'react'
+import { forwardRef, type ReactNode } from 'react'
 import { motion, type HTMLMotionProps } from 'framer-motion'
 import { cn } from '@/utils'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'icon'
 type Size = 'sm' | 'md' | 'lg'
 
-interface Props extends Omit<HTMLMotionProps<'button'>, 'ref'> {
+interface Props extends Omit<HTMLMotionProps<'button'>, 'ref' | 'children'> {
   variant?: Variant
   size?: Size
   loading?: boolean
-  icon?: React.ReactNode
+  icon?: ReactNode
+  children?: ReactNode
 }
 
 const variants: Record<Variant, string> = {

@@ -1,10 +1,22 @@
-import { Suspense, useEffect, useState, useCallback } from 'react'
+import { Suspense, useEffect, useState, useCallback, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Float, Stars, MeshDistortMaterial, Sphere } from '@react-three/drei'
 import { motion, AnimatePresence } from 'framer-motion'
 import Particles, { ParticlesProvider } from '@tsparticles/react'
 import type { Engine } from '@tsparticles/engine'
 import { loadSlim } from '@tsparticles/slim'
+
+const PARTICLE_OPTIONS = {
+  background: { color: { value: 'transparent' } },
+  particles: {
+    color: { value: ['#3B82F6', '#8B5CF6', '#10B981'] },
+    number: { value: 60 },
+    opacity: { value: { min: 0.1, max: 0.4 } },
+    size: { value: { min: 1, max: 3 } },
+    move: { enable: true, speed: 0.6 },
+    links: { enable: true, color: '#3B82F6', opacity: 0.1, distance: 120 },
+  },
+} as const
 
 function FloatingOrb({ position, color, scale = 1 }: { position: [number, number, number]; color: string; scale?: number }) {
   return (
@@ -36,6 +48,7 @@ interface Props {
 
 function HeroContent({ onComplete }: Props) {
   const [visible, setVisible] = useState(true)
+  const escTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -45,12 +58,13 @@ function HeroContent({ onComplete }: Props) {
     const keyHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setVisible(false)
-        setTimeout(onComplete, 300)
+        escTimerRef.current = setTimeout(onComplete, 300)
       }
     }
     window.addEventListener('keydown', keyHandler)
     return () => {
       clearTimeout(timer)
+      if (escTimerRef.current) clearTimeout(escTimerRef.current)
       window.removeEventListener('keydown', keyHandler)
     }
   }, [onComplete])
@@ -68,17 +82,7 @@ function HeroContent({ onComplete }: Props) {
           <Particles
             id="hero-particles"
             className="absolute inset-0"
-            options={{
-              background: { color: { value: 'transparent' } },
-              particles: {
-                color: { value: ['#3B82F6', '#8B5CF6', '#10B981'] },
-                number: { value: 60 },
-                opacity: { value: { min: 0.1, max: 0.4 } },
-                size: { value: { min: 1, max: 3 } },
-                move: { enable: true, speed: 0.6 },
-                links: { enable: true, color: '#3B82F6', opacity: 0.1, distance: 120 },
-              },
-            }}
+            options={PARTICLE_OPTIONS}
           />
 
           <div className="relative h-64 w-full max-w-lg">

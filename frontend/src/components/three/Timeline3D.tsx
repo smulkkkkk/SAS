@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Sphere, Line } from '@react-three/drei'
 import type { Transaction } from '@/types'
@@ -8,17 +8,17 @@ interface Props {
 }
 
 function TimelineNodes({ transactions }: Props) {
-  const nodes = transactions.slice(0, 20).map((t, i) => ({
+  const nodes = useMemo(() => transactions.slice(0, 20).map((t, i) => ({
     position: [i * 1.5 - 14, (Math.random() - 0.5) * 2, 0] as [number, number, number],
     color: t.tipo === 'entrada' ? '#10B981' : '#EF4444',
     size: Math.min(0.3, Math.max(0.05, t.valor / 5000)),
     transaction: t,
-  }))
+  })), [transactions])
 
   return (
     <group>
       {nodes.map((n, i) => (
-        <group key={i}>
+        <group key={n.transaction.id}>
           <Sphere args={[n.size, 16, 16]} position={n.position}>
             <meshStandardMaterial color={n.color} emissive={n.color} emissiveIntensity={0.3} />
           </Sphere>

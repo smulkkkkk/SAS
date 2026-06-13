@@ -1,0 +1,23 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Build outputs
+dist/
+dist-ssr/
+*.local
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Temp files
+vite_out.txt
+vite_err.txt

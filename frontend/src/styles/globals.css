@@ -1,0 +1,85 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/lexend/400.css';
+@import '@fontsource/lexend/500.css';
+@import '@fontsource/jetbrains-mono/400.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-base: #0B1020;
+  --bg-card: #121A2F;
+  --bg-elevated: #1A2540;
+  --text-primary: #E5E7EB;
+  --text-muted: #94A3B8;
+  --accent-blue: #3B82F6;
+  --accent-purple: #8B5CF6;
+  --font-family: 'Inter', system-ui, sans-serif;
+  --font-size-base: 16px;
+  --spacing-factor: 1;
+  --radius: 0.75rem;
+}
+
+:root.theme-light {
+  --bg-base: #F1F5F9;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #F8FAFC;
+  --text-primary: #0F172A;
+  --text-muted: #64748B;
+}
+
+:root.theme-contrast {
+  --bg-base: #000000;
+  --bg-card: #0A0A0A;
+  --bg-elevated: #111111;
+  --text-primary: #FFFFFF;
+  --text-muted: #CCCCCC;
+  --accent-blue: #60A5FA;
+  --accent-purple: #A78BFA;
+}
+
+html {
+  font-size: var(--font-size-base);
+  font-family: var(--font-family);
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+.glass {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.theme-contrast .glass {
+  background: transparent;
+  backdrop-filter: none;
+  border: 2px solid #FFFFFF;
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .border-gradient {
+    border: 1px solid transparent;
+    background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+                linear-gradient(135deg, var(--accent-blue), var(--accent-purple)) border-box;
+  }
+}

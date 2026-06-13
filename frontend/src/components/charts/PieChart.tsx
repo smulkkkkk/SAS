@@ -26,8 +26,8 @@ export function PieChart({ data, currency = true, height = 240, innerRadius = 60
     <ResponsiveContainer width="100%" height={height}>
       <RePieChart>
         <Pie data={data} cx="50%" cy="50%" innerRadius={innerRadius} outerRadius={innerRadius + 40} paddingAngle={4} dataKey="value">
-          {data.map((entry, i) => (
-            <Cell key={i} fill={entry.color} />
+          {data.map((entry) => (
+            <Cell key={entry.name} fill={entry.color} />
           ))}
         </Pie>
         <Tooltip content={<CustomTooltip currency={currency} />} />

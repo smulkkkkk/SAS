@@ -33,7 +33,10 @@ export function BarChart({ data, series, xKey, currency = false, height = 240, s
       <ReBarChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }} barCategoryGap="30%">
         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
         <XAxis dataKey={xKey} tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => currency ? `R$${(v/1000).toFixed(0)}k` : String(v)} />
+        <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => {
+          if (!currency) return String(v)
+          return v >= 1000 ? `R$${(v/1000).toFixed(0)}k` : `R$${v}`
+        }} />
         <Tooltip content={<CustomTooltip currency={currency} />} />
         <Legend wrapperStyle={{ fontSize: 12, color: 'var(--text-muted)' }} />
         {series.map((s) => (

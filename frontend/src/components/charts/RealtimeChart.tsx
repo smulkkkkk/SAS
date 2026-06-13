@@ -14,8 +14,7 @@ interface Props {
 export function RealtimeChart({ data, trend, delta, currentValue }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<IChartApi | null>(null)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const seriesRef = useRef<ISeriesApi<any> | null>(null)
+  const seriesRef = useRef<ISeriesApi<'Line'> | null>(null)
 
   useEffect(() => {
     if (!containerRef.current) return

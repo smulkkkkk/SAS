@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useMonthlyData, useCategories } from '@/hooks'
 import { Card, Skeleton } from '@/components/ui'
 import { AreaChart, BarChart, PieChart } from '@/components/charts'
@@ -14,18 +15,20 @@ export default function ReportsPage() {
   const { data: monthly = [], isLoading: loadingM } = useMonthlyData()
   const { data: categories = [], isLoading: loadingC } = useCategories()
 
-  const pieData = categories
-    .filter(c => c.tipo === 'saida')
-    .map(c => ({ name: c.nome, value: c.gasto, color: c.cor }))
+  const pieData = useMemo(
+    () => categories.filter(c => c.tipo === 'saida').map(c => ({ name: c.nome, value: c.gasto, color: c.cor })),
+    [categories]
+  )
 
-  const topExpenseCategories = [...categories]
-    .filter(c => c.tipo === 'saida')
-    .sort((a, b) => b.gasto - a.gasto)
-    .slice(0, 6)
+  const topExpenseCategories = useMemo(
+    () => [...categories].filter(c => c.tipo === 'saida').sort((a, b) => b.gasto - a.gasto).slice(0, 6),
+    [categories]
+  )
 
-  const maxGasto = categories
-    .filter(c => c.tipo === 'saida')
-    .reduce((m, c) => Math.max(m, c.gasto), 0)
+  const maxGasto = useMemo(
+    () => categories.filter(c => c.tipo === 'saida').reduce((m, c) => Math.max(m, c.gasto), 0),
+    [categories]
+  )
 
   return (
     <div className="p-6 lg:p-8 max-w-[1200px] mx-auto space-y-6">

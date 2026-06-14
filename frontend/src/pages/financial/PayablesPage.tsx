@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { usePayables, useUpdatePayableStatus, useDeletePayable, useCreatePayable } from '@/hooks'
 import { Card, Badge, Button, Modal, DataTable } from '@/components/ui'
 import { formatCurrency, formatDate } from '@/utils'
@@ -19,7 +19,10 @@ export default function PayablesPage() {
   const createPayable = useCreatePayable()
   const { addToast } = useNotificationsStore()
 
-  const filtered = (payables.filter(p => tab === 'todas' ? true : p.tipo === tab)) as unknown as PRow[]
+  const filtered = useMemo(
+    () => payables.filter(p => tab === 'todas' ? true : p.tipo === tab),
+    [payables, tab]
+  ) as unknown as PRow[]
   const vencidos = payables.filter(p => p.status === 'vencido').length
 
   const columns: Column<PRow>[] = [

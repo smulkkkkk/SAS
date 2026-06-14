@@ -45,7 +45,7 @@ export default function HealthPage() {
           {health.insights.length === 0 && <p className="text-[var(--text-muted)] text-sm">Sem alertas no momento</p>}
           {health.insights.map((insight, i) => (
             <motion.div
-              key={i}
+              key={`${i}-${insight.slice(0, 20)}`}
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { useTransactions, useFinancialSummary } from '@/hooks'
+import { useTransactions } from '@/hooks'
 import { Card, Badge, Skeleton, Button, DataTable } from '@/components/ui'
 import { AreaChart } from '@/components/charts'
 import { Timeline3D } from '@/components/three'
@@ -50,20 +50,20 @@ export default function CashflowPage() {
   const [period, setPeriod] = useState<Period>('30d')
   const [view3D, setView3D] = useState(false)
   const { data: transactions = [], isLoading } = useTransactions()
-  const { data: _summary } = useFinancialSummary()
-
   const filtered = useMemo(() => filterByPeriod(transactions, period), [transactions, period])
-  const totalEntradas = filtered.filter(t => t.tipo === 'entrada').reduce((s, t) => s + t.valor, 0)
-  const totalSaidas = filtered.filter(t => t.tipo === 'saida').reduce((s, t) => s + t.valor, 0)
+
+  const { totalEntradas, totalSaidas } = useMemo(() => ({
+    totalEntradas: filtered.filter(t => t.tipo === 'entrada').reduce((s, t) => s + t.valor, 0),
+    totalSaidas: filtered.filter(t => t.tipo === 'saida').reduce((s, t) => s + t.valor, 0),
+  }), [filtered])
 
   const chartData = useMemo(() => {
-    const byDate: Record<string, { data: string; entrada: number; saida: number }> = {}
+    const byDate: Record<string, { iso: string; data: string; entrada: number; saida: number }> = {}
     filtered.forEach(t => {
-      const key = t.data
-      if (!byDate[key]) byDate[key] = { data: formatDate(t.data), entrada: 0, saida: 0 }
-      byDate[key][t.tipo === 'entrada' ? 'entrada' : 'saida'] += t.valor
+      if (!byDate[t.data]) byDate[t.data] = { iso: t.data, data: formatDate(t.data), entrada: 0, saida: 0 }
+      byDate[t.data][t.tipo === 'entrada' ? 'entrada' : 'saida'] += t.valor
     })
-    return Object.values(byDate).sort((a, b) => a.data.localeCompare(b.data)).slice(-30)
+    return Object.values(byDate).sort((a, b) => a.iso.localeCompare(b.iso)).slice(-30)
   }, [filtered])
 
   const tableData = filtered as unknown as TRow[]

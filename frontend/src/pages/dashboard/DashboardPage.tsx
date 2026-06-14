@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const { data: monthly = [] } = useMonthlyData()
   const { data: appointments = [] } = useAppointments()
   const { data: chartData, trend: trendRaw, delta, currentValue } = useRealTimeChart()
-  const trend = trendRaw as 'up' | 'down'
+  const trend = trendRaw === 'up' ? 'up' : 'down'
 
   useEffect(() => {
     if (!heroShown) return
@@ -85,7 +85,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Quick stats row */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
                 { label: 'Contas hoje', value: summary?.contasVencendoHoje ?? 0, icon: '📋' },
                 { label: 'Agendamentos hoje', value: todayAppts.length, icon: '📅' },

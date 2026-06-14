@@ -29,7 +29,7 @@ export function AlertsWidget() {
     <div className="space-y-2">
       {alerts.map((a, i) => (
         <motion.div
-          key={i}
+          key={a.type}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.1 }}

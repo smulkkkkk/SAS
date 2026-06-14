@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Modal, Button } from '@/components/ui'
 import { useCreateAppointment, useCancelAppointment, useServices } from '@/hooks'
 import { useNotificationsStore } from '@/store'
+import { toISODate } from '@/utils'
 import type { Appointment } from '@/types'
 
 interface Props {
@@ -22,6 +23,12 @@ export function AppointmentModal({ open, onClose, appointment, defaultDate }: Pr
   const { addToast } = useNotificationsStore()
 
   const isView = !!appointment
+
+  useEffect(() => {
+    if (open) {
+      setForm({ nome: '', telefone: '', servico: '', data: defaultDate ?? '', hora: '' })
+    }
+  }, [open, defaultDate])
 
   async function handleCreate() {
     if (!form.nome || !form.servico || !form.data || !form.hora) {
@@ -67,7 +74,7 @@ export function AppointmentModal({ open, onClose, appointment, defaultDate }: Pr
           ))}
           <div className="flex gap-3 pt-2">
             <Button variant="secondary" className="flex-1" onClick={onClose}>Fechar</Button>
-            <Button variant="danger" className="flex-1" onClick={handleCancel}>Cancelar Agendamento</Button>
+            <Button variant="danger" className="flex-1" onClick={handleCancel} disabled={appointment.status === 'cancelado' || appointment.status === 'concluido'}>Cancelar Agendamento</Button>
           </div>
         </div>
       ) : (
@@ -80,7 +87,7 @@ export function AppointmentModal({ open, onClose, appointment, defaultDate }: Pr
             <div key={f.key}>
               <label className="text-[var(--text-muted)] text-xs block mb-1">{f.label}</label>
               <input type={f.type} placeholder={f.placeholder} value={form[f.key as keyof typeof form]}
-                min={f.type === 'date' ? new Date().toISOString().split('T')[0] : undefined}
+                min={f.type === 'date' ? toISODate(new Date()) : undefined}
                 onChange={e => setForm(p => ({...p, [f.key]: e.target.value}))}
                 className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-[var(--text-primary)] text-sm focus:outline-none" />
             </div>

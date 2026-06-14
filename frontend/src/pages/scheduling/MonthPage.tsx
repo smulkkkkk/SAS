@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAppointments } from '@/hooks'
 import { AppointmentModal } from '@/features/appointments/AppointmentModal'
+import { Button } from '@/components/ui'
 import { toISODate, cn } from '@/utils'
 import type { Appointment } from '@/types'
 
@@ -48,6 +49,7 @@ export default function MonthPage() {
             {date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
           </span>
           <button onClick={next} className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-muted)]">›</button>
+          <Button onClick={() => setCreateOpen(true)}>+ Novo</Button>
         </div>
       </div>
 

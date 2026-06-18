@@ -2,7 +2,9 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
+const LoginPage              = lazy(() => import('@/pages/auth/LoginPage'))
 const DashboardPage         = lazy(() => import('@/pages/dashboard/DashboardPage'))
 const CashflowPage          = lazy(() => import('@/pages/financial/CashflowPage'))
 const PayablesPage          = lazy(() => import('@/pages/financial/PayablesPage'))
@@ -30,7 +32,15 @@ export function AppRoutes() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
-        <Route path="/" element={<AppLayout />}>
+        {/* Public */}
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Protected */}
+        <Route path="/" element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="financial">

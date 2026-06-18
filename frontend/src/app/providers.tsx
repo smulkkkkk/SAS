@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { useAuthStore } from '@/store'
+import { useLenis } from '@/hooks/useLenis'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -12,6 +13,7 @@ const queryClient = new QueryClient({
 function AuthInitializer({ children }: { children: ReactNode }) {
   const initialize = useAuthStore((s) => s.initialize)
   const called = useRef(false)
+  useLenis()
 
   useEffect(() => {
     if (called.current) return

@@ -17,7 +17,8 @@
     "noFallthroughCasesInSwitch": true,
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
-    "paths": { "@/*": ["./src/*"] }
+    "paths": { "@/*": ["./src/*"] },
+    "types": ["node"]
   },
   "include": ["src"],
   "exclude": ["src/test-setup.ts", "src/**/*.test.ts", "src/**/*.test.tsx", "src/**/*.spec.ts"],

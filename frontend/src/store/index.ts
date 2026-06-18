@@ -3,4 +3,4 @@ export * from './ui.store'
 export * from './accessibility.store'
 export * from './notifications.store'
 export * from './auth.store'
-// export * from './chat.store'   // Task 7
+export * from './chat.store'

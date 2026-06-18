@@ -4,6 +4,7 @@ import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
 import { MobileDrawer } from './MobileDrawer'
 import { useUIStore } from '@/store'
+import { ChatWidget } from '@/components/chat/ChatWidget'
 
 export function AppLayout() {
   const location = useLocation()
@@ -41,6 +42,8 @@ export function AppLayout() {
           </motion.main>
         </AnimatePresence>
       </div>
+
+      <ChatWidget />
     </div>
   )
 }

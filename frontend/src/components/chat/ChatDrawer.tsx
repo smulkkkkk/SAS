@@ -41,7 +41,7 @@ export function ChatDrawer() {
             <button
               onClick={clearHistory}
               className="p-1.5 rounded-lg hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-              title="Limpar historico"
+              title="Limpar histórico"
             >
               <svg
                 className="w-3.5 h-3.5"
@@ -80,9 +80,9 @@ export function ChatDrawer() {
           {messages.length === 0 && (
             <div className="h-full flex items-center justify-center">
               <p className="text-xs text-[var(--text-muted)] text-center leading-relaxed">
-                Ola! Pergunte sobre seus
+                Olá! Pergunte sobre seus
                 <br />
-                agendamentos, financas ou clientes.
+                agendamentos, finanças ou clientes.
               </p>
             </div>
           )}

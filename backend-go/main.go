@@ -2,6 +2,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -14,8 +15,12 @@ import (
 )
 
 func corsMiddleware() gin.HandlerFunc {
+	allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
+	if allowedOrigin == "" {
+		allowedOrigin = "http://localhost:5173" // safe default for dev
+	}
 	return func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "http://localhost:5173")
+		c.Header("Access-Control-Allow-Origin", allowedOrigin)
 		c.Header("Access-Control-Allow-Credentials", "true")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH")
@@ -30,6 +35,11 @@ func corsMiddleware() gin.HandlerFunc {
 func main() {
 	godotenv.Load()
 	models.InitDB()
+
+	secret := os.Getenv("JWT_SECRET")
+	if len(secret) < 32 {
+		log.Fatal("JWT_SECRET must be at least 32 characters")
+	}
 
 	r := gin.Default()
 	r.Use(corsMiddleware())

@@ -63,28 +63,33 @@ export const useChatStore = create<ChatState>((set, _get) => ({
       const decoder = new TextDecoder()
       let buffer = ''
 
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        buffer += decoder.decode(value, { stream: true })
-        const lines = buffer.split('\n')
-        buffer = lines.pop() ?? ''
+      try {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          buffer += decoder.decode(value, { stream: true })
+          const lines = buffer.split('\n')
+          buffer = lines.pop() ?? ''
 
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue
-          const data = line.slice(6)
-          if (data === '[DONE]') break
-          try {
-            const parsed = JSON.parse(data)
-            if (parsed.text) {
-              set((s) => ({
-                messages: s.messages.map((m) =>
-                  m.id === assistantId ? { ...m, content: m.content + parsed.text } : m
-                ),
-              }))
-            }
-          } catch { /* continua */ }
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue
+            const data = line.slice(6)
+            if (data === '[DONE]') break
+            try {
+              const parsed = JSON.parse(data)
+              if (parsed.text) {
+                set((s) => ({
+                  messages: s.messages.map((m) =>
+                    m.id === assistantId ? { ...m, content: m.content + parsed.text } : m
+                  ),
+                }))
+              }
+            } catch { /* continua */ }
+          }
         }
+      } catch (streamErr) {
+        try { reader.cancel() } catch { /* ignore */ }
+        throw streamErr
       }
     } catch {
       set((s) => ({

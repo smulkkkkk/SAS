@@ -74,9 +74,17 @@ func Chat(c *gin.Context) {
 		Stream:    true,
 	}
 
-	body, _ := json.Marshal(claudeReq)
-	httpReq, _ := http.NewRequestWithContext(c.Request.Context(), "POST",
+	body, err := json.Marshal(claudeReq)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "erro interno"})
+		return
+	}
+	httpReq, err := http.NewRequestWithContext(c.Request.Context(), "POST",
 		"https://api.anthropic.com/v1/messages", bytes.NewReader(body))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "erro interno"})
+		return
+	}
 	httpReq.Header.Set("x-api-key", os.Getenv("CLAUDE_API_KEY"))
 	httpReq.Header.Set("anthropic-version", "2023-06-01")
 	httpReq.Header.Set("content-type", "application/json")

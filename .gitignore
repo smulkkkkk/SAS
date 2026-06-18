@@ -21,3 +21,7 @@ dist-ssr/
 # Temp files
 vite_out.txt
 vite_err.txt
+
+# Go backend
+backend-go/pulseflow.db
+backend-go/*.exe

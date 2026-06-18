@@ -6,20 +6,12 @@ import { Globe3D } from '@/components/three'
 import { RealtimeChart } from '@/components/charts'
 import { AreaChart } from '@/components/charts'
 import { KPICard, Card, Skeleton } from '@/components/ui'
-import { useFinancialSummary, useMonthlyData, useRealTimeChart, useAppointments } from '@/hooks'
+import { useFinancialSummary, useMonthlyData, useRealTimeChart, useAppointments, useScrollReveal } from '@/hooks'
 import { ActivityFeed } from './ActivityFeed'
 import { AlertsWidget } from './AlertsWidget'
 import { MiniCalendar } from './MiniCalendar'
 import { toISODate } from '@/utils'
 
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-}
-const item = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-}
 
 export default function DashboardPage() {
   const [heroShown, setHeroShown] = useState(() => !sessionStorage.getItem('hero-shown'))
@@ -33,6 +25,8 @@ export default function DashboardPage() {
     if (!heroShown) return
     sessionStorage.setItem('hero-shown', '1')
   }, [heroShown])
+
+  const sectionRef = useScrollReveal<HTMLDivElement>({ stagger: 0.1 })
 
   const today = toISODate(new Date())
   const todayAppts = appointments.filter(a => a.data === today)
@@ -67,9 +61,9 @@ export default function DashboardPage() {
               <div className="flex justify-center">
                 <DataCube3D />
               </div>
-              <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-2 gap-4">
+              <div ref={sectionRef} className="grid grid-cols-2 gap-4">
                 {kpis.map((kpi) => (
-                  <motion.div key={kpi.title} variants={item}>
+                  <div key={kpi.title} data-reveal>
                     {loadingSummary ? <Skeleton variant="card" /> : (
                       <KPICard
                         title={kpi.title}
@@ -78,9 +72,9 @@ export default function DashboardPage() {
                         color={kpi.color}
                       />
                     )}
-                  </motion.div>
+                  </div>
                 ))}
-              </motion.div>
+              </div>
             </div>
 
             {/* Quick stats row */}

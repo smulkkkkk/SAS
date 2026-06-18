@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { useUIStore } from '@/store'
 import { NavItem } from './NavItem'
 import type { NavItem as NavItemType } from '@/types'
+import { SparklesText } from '@/components/inspira/SparklesText'
 
 const NAV_ITEMS: NavItemType[] = [
   { label: 'Dashboard',     path: '/dashboard',  icon: '⚡' },
@@ -64,7 +65,7 @@ export function Sidebar() {
             exit={{ opacity: 0 }}
             className="overflow-hidden"
           >
-            <p className="text-[var(--text-primary)] font-bold text-sm leading-none">PulseFlow</p>
+            <SparklesText sparkleCount={3} className="text-[var(--text-primary)] font-bold text-sm leading-none">PulseFlow</SparklesText>
             <p className="text-[var(--text-muted)] text-xs mt-0.5">Business Suite</p>
           </motion.div>
         )}

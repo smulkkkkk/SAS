@@ -1,5 +1,6 @@
 import { cn } from '@/utils'
 import type { ReactNode } from 'react'
+import { BorderBeam } from '@/components/inspira/BorderBeam'
 
 type Variant = 'default' | 'elevated' | 'glass'
 
@@ -20,8 +21,9 @@ export function Card({ children, className, variant = 'default', onClick }: Prop
   return (
     <div
       onClick={onClick}
-      className={cn('rounded-2xl p-5', variants[variant], onClick && 'cursor-pointer', className)}
+      className={cn('rounded-2xl p-5', variants[variant], variant === 'glass' && 'relative', onClick && 'cursor-pointer', className)}
     >
+      {variant === 'glass' && <BorderBeam />}
       {children}
     </div>
   )

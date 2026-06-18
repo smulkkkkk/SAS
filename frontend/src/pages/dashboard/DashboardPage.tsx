@@ -38,10 +38,10 @@ export default function DashboardPage() {
   const todayAppts = appointments.filter(a => a.data === today)
 
   const kpis = [
-    { title: 'Receita do Mês', value: summary?.receita ?? 0, prev: monthly.slice(-2)[0]?.receita, icon: '💰', color: 'blue' as const },
-    { title: 'Despesas', value: summary?.despesa ?? 0, prev: monthly.slice(-2)[0]?.despesa, icon: '📉', color: 'purple' as const },
-    { title: 'Lucro Líquido', value: summary?.lucro ?? 0, prev: monthly.slice(-2)[0]?.lucro, icon: '✨', color: 'green' as const },
-    { title: 'Fluxo de Caixa', value: summary?.fluxoCaixa ?? 0, icon: '🔄', color: 'yellow' as const },
+    { title: 'Receita do Mês', value: summary?.receita ?? 0, prev: monthly.slice(-2)[0]?.receita, color: 'blue' as const },
+    { title: 'Despesas', value: summary?.despesa ?? 0, prev: monthly.slice(-2)[0]?.despesa, color: 'purple' as const },
+    { title: 'Lucro Líquido', value: summary?.lucro ?? 0, prev: monthly.slice(-2)[0]?.lucro, color: 'green' as const },
+    { title: 'Fluxo de Caixa', value: summary?.fluxoCaixa ?? 0, color: 'yellow' as const },
   ]
 
   return (
@@ -55,7 +55,7 @@ export default function DashboardPage() {
             {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' })}
           </p>
           <h1 className="text-2xl font-bold text-[var(--text-primary)] mt-1">
-            Bom dia, Admin 👋
+            Bom dia, Admin
           </h1>
         </motion.div>
 
@@ -75,7 +75,6 @@ export default function DashboardPage() {
                         title={kpi.title}
                         value={kpi.value}
                         previousValue={kpi.prev}
-                        icon={kpi.icon}
                         color={kpi.color}
                       />
                     )}
@@ -87,15 +86,14 @@ export default function DashboardPage() {
             {/* Quick stats row */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
-                { label: 'Contas hoje', value: summary?.contasVencendoHoje ?? 0, icon: '📋' },
-                { label: 'Agendamentos hoje', value: todayAppts.length, icon: '📅' },
-                { label: 'Ticket médio', value: summary?.ticketMedio ?? 0, icon: '🎫' },
+                { label: 'Contas hoje', value: summary?.contasVencendoHoje ?? 0 },
+                { label: 'Agendamentos hoje', value: todayAppts.length },
+                { label: 'Ticket médio', value: summary?.ticketMedio ?? 0 },
               ].map((s) => (
                 <Card key={s.label} className="flex items-center gap-3">
-                  <span className="text-2xl">{s.icon}</span>
                   <div>
-                    <p className="text-[var(--text-primary)] font-bold text-lg">{s.value}</p>
-                    <p className="text-[var(--text-muted)] text-xs">{s.label}</p>
+                    <p className="text-[var(--text-primary)] font-bold text-lg tabular-nums">{s.value}</p>
+                    <p className="text-[var(--text-muted)] text-xs uppercase tracking-widest">{s.label}</p>
                   </div>
                 </Card>
               ))}

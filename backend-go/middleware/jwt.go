@@ -19,6 +19,7 @@ type Claims struct {
 }
 
 func JWTAuth() gin.HandlerFunc {
+	secret := []byte(os.Getenv("JWT_SECRET"))
 	return func(c *gin.Context) {
 		header := c.GetHeader("Authorization")
 		if !strings.HasPrefix(header, "Bearer ") {
@@ -28,7 +29,7 @@ func JWTAuth() gin.HandlerFunc {
 		tokenStr := strings.TrimPrefix(header, "Bearer ")
 		claims := &Claims{}
 		token, err := jwt.ParseWithClaims(tokenStr, claims, func(t *jwt.Token) (any, error) {
-			return []byte(os.Getenv("JWT_SECRET")), nil
+			return secret, nil
 		})
 		if err != nil || !token.Valid {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "token inválido"})

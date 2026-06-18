@@ -16,11 +16,16 @@ func JavaProxy() gin.HandlerFunc {
 		if javaURL == "" {
 			javaURL = "http://localhost:8081"
 		}
-		target, _ := url.Parse(javaURL)
+		target, err := url.Parse(javaURL)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid JAVA_URL"})
+			return
+		}
 		proxy := httputil.NewSingleHostReverseProxy(target)
+		// Let the default Director handle path + query; only fix the Host header
+		defaultDirector := proxy.Director
 		proxy.Director = func(req *http.Request) {
-			req.URL.Scheme = target.Scheme
-			req.URL.Host = target.Host
+			defaultDirector(req)
 			req.Host = target.Host
 		}
 		proxy.ServeHTTP(c.Writer, c.Request)

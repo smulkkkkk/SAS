@@ -3,7 +3,6 @@ package models
 
 import (
 	"log"
-	"os"
 
 	"github.com/glebarez/sqlite"
 	"golang.org/x/crypto/bcrypt"
@@ -26,7 +25,9 @@ func InitDB() {
 	if err != nil {
 		log.Fatal("failed to connect database:", err)
 	}
-	DB.AutoMigrate(&User{})
+	if err := DB.AutoMigrate(&User{}); err != nil {
+		log.Fatal("failed to migrate:", err)
+	}
 	seedUsers()
 }
 
@@ -36,7 +37,10 @@ func seedUsers() {
 	if count > 0 {
 		return
 	}
-	hash, _ := bcrypt.GenerateFromPassword([]byte("admin123"), bcrypt.DefaultCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte("admin123"), bcrypt.DefaultCost)
+	if err != nil {
+		log.Fatal("failed to hash seed password:", err)
+	}
 	DB.Create(&User{
 		Email:    "admin@pulseflow.com",
 		Password: string(hash),
@@ -44,5 +48,4 @@ func seedUsers() {
 		Role:     "admin",
 	})
 	log.Println("Seed: admin@pulseflow.com / admin123")
-	_ = os.Getenv("") // suppress unused import warning
 }

@@ -69,7 +69,14 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("refresh_token", refreshToken, 7*24*3600, "/auth", "", false, true)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    refreshToken,
+		MaxAge:   7 * 24 * 3600,
+		Path:     "/auth",
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	})
 	c.JSON(http.StatusOK, gin.H{
 		"access_token": accessToken,
 		"user": gin.H{
@@ -127,6 +134,13 @@ func Refresh(c *gin.Context) {
 }
 
 func Logout(c *gin.Context) {
-	c.SetCookie("refresh_token", "", -1, "/auth", "", false, true)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    "",
+		MaxAge:   -1,
+		Path:     "/auth",
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	})
 	c.JSON(http.StatusOK, gin.H{"message": "logout realizado"})
 }

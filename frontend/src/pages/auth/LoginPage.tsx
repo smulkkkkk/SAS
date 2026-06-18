@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { AnimatedBackground } from '@/components/inspira/AnimatedBackground'
 import { useAuthStore } from '@/store'
@@ -7,22 +7,26 @@ import { cn } from '@/utils'
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { login, accessToken } = useAuthStore()
+  const { login, accessToken, isInitialized } = useAuthStore()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const formRef = useRef<HTMLDivElement>(null)
 
+  // Redirect if already authenticated — before paint
+  if (isInitialized && accessToken) {
+    return <Navigate to="/dashboard" replace />
+  }
+
   useEffect(() => {
-    if (accessToken) { navigate('/dashboard', { replace: true }); return }
     if (!formRef.current) return
     const els = formRef.current.querySelectorAll('.reveal-item')
     gsap.fromTo(els,
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out', delay: 0.2 }
     )
-  }, [accessToken, navigate])
+  }, []) // only on mount — no accessToken dependency
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

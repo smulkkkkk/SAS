@@ -25,12 +25,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isInitialized: false,
 
   initialize: async () => {
-    try {
-      const ok = await get().refreshToken()
-      if (!ok) set({ isInitialized: true })
-    } catch {
-      set({ isInitialized: true })
-    }
+    await get().refreshToken()
   },
 
   login: async (email, password) => {

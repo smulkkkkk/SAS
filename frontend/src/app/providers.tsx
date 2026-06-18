@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { useAuthStore } from '@/store'
@@ -11,7 +11,14 @@ const queryClient = new QueryClient({
 
 function AuthInitializer({ children }: { children: ReactNode }) {
   const initialize = useAuthStore((s) => s.initialize)
-  useEffect(() => { initialize() }, [initialize])
+  const called = useRef(false)
+
+  useEffect(() => {
+    if (called.current) return
+    called.current = true
+    initialize()
+  }, [initialize])
+
   return <>{children}</>
 }
 

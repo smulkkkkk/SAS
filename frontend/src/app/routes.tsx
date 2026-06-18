@@ -33,7 +33,11 @@ export function AppRoutes() {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* Public */}
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={
+          <Suspense fallback={<div className="min-h-screen bg-[#0B1020]" />}>
+            <LoginPage />
+          </Suspense>
+        } />
 
         {/* Protected */}
         <Route path="/" element={
